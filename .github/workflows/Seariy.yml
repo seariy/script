@@ -5,6 +5,10 @@ on:
   #push:
   workflow_dispatch:
 
+env:
+  src_git: https://github.com/litter6210/padavan-4.4.git
+  src_dir: /opt/padavan
+  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
@@ -26,12 +30,21 @@ jobs:
         run: |
           sudo apt update
           sudo apt install libtool-bin gperf python3-docutils autopoint gettext
+      
+      - name: Clone source and Download toolchain
+        if: (!cancelled())
+        run: |
+          git clone --depth=1 $src_git $src_dir
+          cd $src_dir/toolchain-mipsel && chmod +x dl_toolchain.sh
+        
       - name: Run shellcheck
         run: sh ./trunk/tools/shellcheck.sh
+      
       - name: Prepare toolchain
         run: |
           cd toolchain-mipsel
           sh dl_toolchain.sh
+      
       - name: Start build
         run: |
           cd trunk
@@ -39,6 +52,7 @@ jobs:
           for m in $targets; do fakeroot ./build_firmware_ci $m; \
           if [ $? = 0 ]; then cp -f images/*.trx ${images_dir}/$m.trx; else exit 1; fi; \
           ./clear_tree_simple >/dev/null 2>&1; done
+      
       - name: Create archive
         if: ${{ success() }}
         run: |
