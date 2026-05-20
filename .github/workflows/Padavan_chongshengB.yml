@@ -49,6 +49,7 @@ jobs:
         ################################################################################################
         ##############  清除默认选项  ###################################################################
         sed -i 's/=y/=n/g' /opt/rt-n56u/trunk/configs/templates/*.config
+        sed -i 's/"<a target='_blank' href='https://services13.ieee.org/RST/standards-ra-web/rest/assignments/?registry=MAC&text=" + client[2].substr(0,6) + "'>" + mac_add_delimiters(client[2]) + "</a>"/mac_add_delimiters(client[2])/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/device-map/clients.asp
         
         ################################################################################################
         ##############  修改默认参数  ###################################################################
@@ -74,7 +75,7 @@ jobs:
         sed -i 's/CONFIG_FIRMWARE_ENABLE_IPV6=n/CONFIG_FIRMWARE_ENABLE_IPV6=y/g' /opt/rt-n56u/trunk/configs/templates/*.config
         sed -i 's/CONFIG_FIRMWARE_INCLUDE_LANG_CN=n/CONFIG_FIRMWARE_INCLUDE_LANG_CN=y/g' /opt/rt-n56u/trunk/configs/templates/*.config
         sed -i 's/CONFIG_FIRMWARE_INCLUDE_FTPD=n/CONFIG_FIRMWARE_INCLUDE_FTPD=y/g' /opt/rt-n56u/trunk/configs/templates/*.config
-        
+        sed -i 's/CONFIG_FIRMWARE_INCLUDE_WIREGUARD=n/CONFIG_FIRMWARE_INCLUDE_WIREGUARD=y/g' /opt/rt-n56u/trunk/configs/templates/*.config
         ################################################################################################
         cp -f configs/templates/$TNAME.config .config
         #########################################################################################
