@@ -38,7 +38,7 @@ jobs:
           chmod +x  $src_dir/toolchain-mipsel/dl_toolchain.sh
         
       - name: Run shellcheck
-        run: sh ./trunk/tools/shellcheck.sh
+        run: sh $src_dir/trunk/tools/shellcheck.sh
       
       - name: Prepare toolchain
         run: |
