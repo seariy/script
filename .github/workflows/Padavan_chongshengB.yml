@@ -49,7 +49,7 @@ jobs:
         ################################################################################################
         ##############  清除默认选项  ###################################################################
         sed -i 's/=y/=n/g' /opt/rt-n56u/trunk/configs/templates/*.config
-        sudo sed -i 's/*/mac_add_delimiters(client[2])/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/device-map/clients.asp
+        sudo sed -i 's/macCell.innerHTML = */macCell.innerHTML = mac_add_delimiters(client[2])/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/device-map/clients.asp
         
         ################################################################################################
         ##############  修改默认参数  ###################################################################
