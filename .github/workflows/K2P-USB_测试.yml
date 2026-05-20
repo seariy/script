@@ -92,7 +92,7 @@ jobs:
         sed -i 's/192.168.1.1/192.168.2.1/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_SettingBackup_Content.asp
 
         ##  设置编译固件默认为 AP模式
-        #echo "#define BOARD_ROLE_REPEATER	1" >> ./configs/boards/${{ matrix.device }}/board.h
+        #echo "#define BOARD_ROLE_REPEATER	1" >> /opt/rt-n56u/trunk/configs/boards/${{ matrix.device }}/board.h
 
         ##  修改源码升级参数
         sed -i 's/"<a target='_blank' href='https://services13.ieee.org/RST/standards-ra-web/rest/assignments/?registry=MAC&text=" + client[2].substr(0,6) + "'>" + mac_add_delimiters(client[2]) + "</a>"/mac_add_delimiters(client[2])/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/device-map/clients.asp
@@ -100,14 +100,14 @@ jobs:
 
         ########################################################################################
         ############  清除默认选项  #############################################################
-        sed -i 's/=y/=n/g' /opt/rt-n56u/trunk/configs/templates/*.config
+        sed -i 's/=y/=n/g' /opt/rt-n56u/trunk/configs/templates/${{ matrix.device }}.config
 
 
         ########################################################################################
         ############  定义插件选项  #############################################################
-        sed -i 's/CONFIG_FIRMWARE_ENABLE_IPV6=n/CONFIG_FIRMWARE_ENABLE_IPV6=y/g' /opt/rt-n56u/trunk/configs/templates/*.config
-        sed -i 's/CONFIG_FIRMWARE_INCLUDE_LANG_CN=n/CONFIG_FIRMWARE_INCLUDE_LANG_CN=y/g' /opt/rt-n56u/trunk/configs/templates/*.config
-
+        sed -i 's/CONFIG_FIRMWARE_ENABLE_IPV6=n/CONFIG_FIRMWARE_ENABLE_IPV6=y/g' /opt/rt-n56u/trunk/configs/templates/${{ matrix.device }}.config
+        sed -i 's/CONFIG_FIRMWARE_INCLUDE_LANG_CN=n/CONFIG_FIRMWARE_INCLUDE_LANG_CN=y/g' /opt/rt-n56u/trunk/configs/templates/${{ matrix.device }}.config
+        echo "CONFIG_FIRMWARE_INCLUDE_WIREGUARD=y" >>/opt/rt-n56u/trunk/configs/templates/${{ matrix.device }}.config
 
 
     - name: Build the firmware
