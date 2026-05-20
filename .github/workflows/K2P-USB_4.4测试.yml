@@ -1,6 +1,8 @@
 #################  Padavan_3.4  #################
 ##############  K2P-USB  纯净精简版  #############
-name: K2P-USB_3.4_hanwckf
+#git clone --depth=1 https://github.com/${GITHUB_REPOSITORY}.git /opt/rt-n56u
+
+name: K2P-USB_4.4测试
 
 on: 
   workflow_dispatch:
@@ -39,16 +41,10 @@ jobs:
       env:
         KERNEL: 3.4
       run: |
-        git clone --depth=1 https://github.com/${GITHUB_REPOSITORY}.git /opt/rt-n56u
+        git clone --depth=1 https://github.com/litter6210/padavan-4.4.git /opt/rt-n56u
         cd /opt/rt-n56u/toolchain-mipsel
         sh dl_toolchain.sh
         mkdir -p /opt/images/
-
-        ##### 修改内存空间和 storage空间17m
-        sed -i 's/0x200000/0x1100000/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
-        sed -i 's/size_etc="6M"/size_etc="17M"/g' /opt/rt-n56u/trunk/user/scripts/dev_init.sh
-        sed -i 's/size_tmp="24M"/size_tmp="120M"/g' /opt/rt-n56u/trunk/user/scripts/dev_init.sh
-        sed -i 's/mtd_part_size=65536/mtd_part_size=17825792/g' /opt/rt-n56u/trunk/user/scripts/mtd_storage.sh
     
     - name: Build Firmware
       env:
