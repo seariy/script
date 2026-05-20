@@ -36,13 +36,10 @@ jobs:
         run: |
           git clone --depth=1 $src_git $src_dir
           chmod +x  $src_dir/toolchain-mipsel/dl_toolchain.sh
-        
+          sh $src_dir/toolchain-mipsel/dl_toolchain.sh
+          
       - name: Run shellcheck
         run: sh $src_dir/trunk/tools/shellcheck.sh
-      
-      - name: Prepare toolchain
-        run: |
-          sh $src_dir/toolchain-mipsel/dl_toolchain.sh
       
       - name: Start build
         run: |
