@@ -62,52 +62,52 @@ jobs:
         ############  修改默认参数  #############################################################
         
         ##  修改主界面的版本号为编译时间
-        sed -i 's/FIRMWARE_BUILDS_REV=*/FIRMWARE_BUILDS_REV=$(shell date +%Y%m%d/g 2>/dev/null)' /opt/rt-n56u/trunk/versions.inc
+        sed -i 's/FIRMWARE_BUILDS_REV=*/FIRMWARE_BUILDS_REV=$(shell date +%Y%m%d/g 2>/dev/null)' /opt/padavan/trunk/versions.inc
 
         ##  修改WIFI的地区，源码中默认2.4G是中国区，5G是美国区，统一改成中国区
-        sed -i 's/"US"/"CN"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/"US"/"CN"/g' /opt/padavan/trunk/user/shared/defaults.h
 
         ##  修改NTP时钟同步服务器；
-        sed -i 's/"ntp1.aliyun.com"/"pool.ntp.org"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
-        sed -i 's/"2001:470:0:50::2"/"time.pool.aliyun.com"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/"ntp1.aliyun.com"/"pool.ntp.org"/g' /opt/padavan/trunk/user/shared/defaults.h
+        sed -i 's/"2001:470:0:50::2"/"time.pool.aliyun.com"/g' /opt/padavan/trunk/user/shared/defaults.h
 
         ##  修改界面中的字符，将2.4G改成2.4GHz、5G改成5GHz，更加严谨
-        sed -i 's/2.4G/2.4GHz/g' /opt/rt-n56u/trunk/user/www/dict/CN.dict
-        sed -i 's/5G/5GHz/g' /opt/rt-n56u/trunk/user/www/dict/CN.dict
-        sed -i 's/2.4G/2.4GHz/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/state.js
-        sed -i 's/value="5G"/value="5GHz"/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/state.js
+        sed -i 's/2.4G/2.4GHz/g' /opt/padavan/trunk/user/www/dict/CN.dict
+        sed -i 's/5G/5GHz/g' /opt/padavan/trunk/user/www/dict/CN.dict
+        sed -i 's/2.4G/2.4GHz/g' /opt/padavan/trunk/user/www/n56u_ribbon_fixed/state.js
+        sed -i 's/value="5G"/value="5GHz"/g' /opt/padavan/trunk/user/www/n56u_ribbon_fixed/state.js
 
         ##  在编译XXXX的固件之前，修改LAN口IP地址
-        sed -i 's/"192.168.2.1"/"192.168.123.1"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
-        sed -i 's/"192.168.2.100"/"192.168.123.100"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
-        sed -i 's/"192.168.2.244"/"192.168.123.244"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/"192.168.2.1"/"192.168.123.1"/g' /opt/padavan/trunk/user/shared/defaults.h
+        sed -i 's/"192.168.2.100"/"192.168.123.100"/g' /opt/padavan/trunk/user/shared/defaults.h
+        sed -i 's/"192.168.2.244"/"192.168.123.244"/g' /opt/padavan/trunk/user/shared/defaults.h
 
-        sed -i 's/192.168.2.1/192.168.2.1/g' /opt/rt-n56u/trunk/user/www/dict/CN.dict
-        sed -i 's/192.168.2.1/192.168.2.1/g' /opt/rt-n56u/trunk/user/www/dict/EN.footer
+        sed -i 's/192.168.2.1/192.168.2.1/g' /opt/padavan/trunk/user/www/dict/CN.dict
+        sed -i 's/192.168.2.1/192.168.2.1/g' /opt/padavan/trunk/user/www/dict/EN.footer
 
-        sed -i 's/192.168.2.1/192.168.2.1/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Restarting.asp
-        sed -i 's/192.168.1.1/192.168.2.1/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_APLAN_Content.asp
-        sed -i 's/192.168.1.1/192.168.2.1/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_LAN_Content.asp
-        sed -i 's/192.168.1.1/192.168.2.1/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/general.js
-        sed -i 's/192.168.1.1/192.168.2.1/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_SettingBackup_Content.asp
+        sed -i 's/192.168.2.1/192.168.2.1/g' /opt/padavan/trunk/user/www/n56u_ribbon_fixed/Restarting.asp
+        sed -i 's/192.168.1.1/192.168.2.1/g' /opt/padavan/trunk/user/www/n56u_ribbon_fixed/Advanced_APLAN_Content.asp
+        sed -i 's/192.168.1.1/192.168.2.1/g' /opt/padavan/trunk/user/www/n56u_ribbon_fixed/Advanced_LAN_Content.asp
+        sed -i 's/192.168.1.1/192.168.2.1/g' /opt/padavan/trunk/user/www/n56u_ribbon_fixed/general.js
+        sed -i 's/192.168.1.1/192.168.2.1/g' /opt/padavan/trunk/user/www/n56u_ribbon_fixed/Advanced_SettingBackup_Content.asp
 
         ##  设置编译固件默认为 AP模式
-        #echo "#define BOARD_ROLE_REPEATER	1" >> /opt/rt-n56u/trunk/configs/boards/${{ matrix.device }}/board.h
+        #echo "#define BOARD_ROLE_REPEATER	1" >> /opt/padavan/trunk/configs/boards/${{ matrix.device }}/board.h
 
         ##  修改源码升级参数
-        sed -i 's/"<a target='_blank' href='https://services13.ieee.org/RST/standards-ra-web/rest/assignments/?registry=MAC&text=" + client[2].substr(0,6) + "'>" + mac_add_delimiters(client[2]) + "</a>"/mac_add_delimiters(client[2])/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/device-map/clients.asp
+        sed -i 's/"<a target='_blank' href='https://services13.ieee.org/RST/standards-ra-web/rest/assignments/?registry=MAC&text=" + client[2].substr(0,6) + "'>" + mac_add_delimiters(client[2]) + "</a>"/mac_add_delimiters(client[2])/g' /opt/padavan/trunk/user/www/n56u_ribbon_fixed/device-map/clients.asp
         
 
         ########################################################################################
         ############  清除默认选项  #############################################################
-        sed -i 's/=y/=n/g' /opt/rt-n56u/trunk/configs/templates/${{ matrix.device }}.config
+        sed -i 's/=y/=n/g' /opt/padavan/trunk/configs/templates/${{ matrix.device }}.config
 
 
         ########################################################################################
         ############  定义插件选项  #############################################################
-        sed -i 's/CONFIG_FIRMWARE_ENABLE_IPV6=n/CONFIG_FIRMWARE_ENABLE_IPV6=y/g' /opt/rt-n56u/trunk/configs/templates/${{ matrix.device }}.config
-        sed -i 's/CONFIG_FIRMWARE_INCLUDE_LANG_CN=n/CONFIG_FIRMWARE_INCLUDE_LANG_CN=y/g' /opt/rt-n56u/trunk/configs/templates/${{ matrix.device }}.config
-        echo "CONFIG_FIRMWARE_INCLUDE_WIREGUARD=y" >>/opt/rt-n56u/trunk/configs/templates/${{ matrix.device }}.config
+        sed -i 's/CONFIG_FIRMWARE_ENABLE_IPV6=n/CONFIG_FIRMWARE_ENABLE_IPV6=y/g' /opt/padavan/trunk/configs/templates/${{ matrix.device }}.config
+        sed -i 's/CONFIG_FIRMWARE_INCLUDE_LANG_CN=n/CONFIG_FIRMWARE_INCLUDE_LANG_CN=y/g' /opt/padavan/trunk/configs/templates/${{ matrix.device }}.config
+        echo "CONFIG_FIRMWARE_INCLUDE_WIREGUARD=y" >>/opt/padavan/trunk/configs/templates/${{ matrix.device }}.config
 
 
     - name: Build the firmware
