@@ -7,7 +7,7 @@ on:
 
 env:
   src_git: https://github.com/litter6210/padavan-4.4.git
-  src_dir: /opt/padavan
+  src_dir: /opt/images
   
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -42,8 +42,7 @@ jobs:
       
       - name: Prepare toolchain
         run: |
-          cd toolchain-mipsel
-          sh dl_toolchain.sh
+          sh $src_dir/toolchain-mipsel/dl_toolchain.sh
       
       - name: Start build
         run: |
