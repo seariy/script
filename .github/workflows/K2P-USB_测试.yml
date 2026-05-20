@@ -62,7 +62,7 @@ jobs:
         ############  修改默认参数  #############################################################
         
         ##  修改主界面的版本号为编译时间
-        sed -i 's/FIRMWARE_BUILDS_REV=*/FIRMWARE_BUILDS_REV=$(shell date +%Y%m%d/g 2>/dev/null)' /opt/padavan/trunk/versions.inc
+        sed -i 's/FIRMWARE_BUILDS_REV=*/FIRMWARE_BUILDS_REV=$(shell date +%Y%m%d/g 2>/dev/null)/g' /opt/padavan/trunk/versions.inc
 
         ##  修改WIFI的地区，源码中默认2.4G是中国区，5G是美国区，统一改成中国区
         sed -i 's/"US"/"CN"/g' /opt/padavan/trunk/user/shared/defaults.h
