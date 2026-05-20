@@ -1,4 +1,4 @@
-name: CI
+name: Seariy
 
 # Controls when the action will run. 
 on: 
@@ -35,7 +35,7 @@ jobs:
         if: (!cancelled())
         run: |
           git clone --depth=1 $src_git $src_dir
-          cd $src_dir/toolchain-mipsel && chmod +x dl_toolchain.sh
+          chmod +x  $src_dir/toolchain-mipsel/dl_toolchain.sh
         
       - name: Run shellcheck
         run: sh ./trunk/tools/shellcheck.sh
