@@ -68,8 +68,8 @@ jobs:
         sed -i 's/"US"/"CN"/g' /opt/padavan/trunk/user/shared/defaults.h
 
         ##  修改NTP时钟同步服务器；
-        sed -i 's/"ntp1.aliyun.com"/"pool.ntp.org"/g' /opt/padavan/trunk/user/shared/defaults.h
-        sed -i 's/"2001:470:0:50::2"/"time.pool.aliyun.com"/g' /opt/padavan/trunk/user/shared/defaults.h
+        #sed -i 's/"ntp1.aliyun.com"/"pool.ntp.org"/g' /opt/padavan/trunk/user/shared/defaults.h
+        #sed -i 's/"2001:470:0:50::2"/"time.pool.aliyun.com"/g' /opt/padavan/trunk/user/shared/defaults.h
 
         ##  修改界面中的字符，将2.4G改成2.4GHz、5G改成5GHz，更加严谨
         sed -i 's/2.4G/2.4GHz/g' /opt/padavan/trunk/user/www/dict/CN.dict
