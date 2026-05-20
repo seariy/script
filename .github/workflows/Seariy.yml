@@ -37,13 +37,10 @@ jobs:
           git clone --depth=1 $src_git $src_dir
           chmod +x  $src_dir/toolchain-mipsel/dl_toolchain.sh
           sh $src_dir/toolchain-mipsel/dl_toolchain.sh
-          
-      - name: Run shellcheck
-        run: sh $src_dir/trunk/tools/shellcheck.sh
+          sh $src_dir/trunk/tools/shellcheck.sh
       
       - name: Start build
         run: |
-          cd trunk
           mkdir -p ${images_dir}
           for m in $targets; do fakeroot ./build_firmware_ci $m; \
           if [ $? = 0 ]; then cp -f images/*.trx ${images_dir}/$m.trx; else exit 1; fi; \
