@@ -93,21 +93,21 @@ jobs:
         
         sudo ./clear_tree
         sudo ./build_firmware_modify $TNAME 0
-        echo "BUILD_TIME=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
-        echo "BUILD_DATE=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_ENV
+        echo "BUILD_TIME=$(date +"%Y.%m.%d_%H︰%M")" >> $GITHUB_ENV
+        echo "BUILD_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
         cp -f .config /opt/images/${TNAME}.config
-        sudo mv -f images/*.trx /opt/images
+        sudo mv -f images/*.trx /opt/images/K2P-USB_3.4.3.9-099_${{ env.BUILD_DATE }}
     
     - name : Upload packages
       uses: actions/upload-artifact@main
       with:
-        name: K2P-USB_3.4.3.9-099_${{ env.BUILD_TIME }}
+        name: K2P-USB_3.4.3.9-099_${{ env.BUILD_DATE }}
         path: /opt/images/*.trx
 
     - uses: ncipollo/release-action@main
       with:
         commit: ${{ github.sha }}
-        tag: ${{ env.BUILD_DATE }}
+        tag: K2P-USB_3.4_${{ env.BUILD_TIME }}
         artifacts: /opt/images/*.trx
         allowUpdates: true
         omitBodyDuringUpdate: true
