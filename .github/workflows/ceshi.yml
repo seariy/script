@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
   
 env:
-  src_git: https://github.com/seariy/padavan-4.4.git
+  src_git: https://github.com/seariy/JDC02-padavan-4.4.git
   src_dir: /opt/padavan
   work_dir: /opt/padavan/trunk
   firmware_dir: /opt/firmware
@@ -20,7 +20,7 @@ jobs:
     if: github.event.repository.owner.id == github.event.sender.id
     strategy:
       matrix:
-        device: [K2P-USB]
+        device: [JDCLOUD-RE-CP-02]
     permissions: 
       contents: write
 
