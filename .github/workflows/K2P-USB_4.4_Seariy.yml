@@ -9,7 +9,7 @@ env:
   src_git: https://github.com/seariy/padavan_4.4.git
   src_dir: /opt/padavan
   work_dir: /opt/padavan/trunk
-  firmware_dir: /opt/firmware
+  firmware_dir: /opt/images
   config_file: K2P-USB.config
   custom_script: custom.sh
 
