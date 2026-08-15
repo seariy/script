@@ -10,7 +10,7 @@ env:
   src_dir: /opt/padavan
   work_dir: /opt/padavan/trunk
   firmware_dir: /opt/firmware
-  config_file: K2P-USB.config
+  config_file: JDCLOUD-RE-CP-02.config
   custom_script: custom.sh
 
 jobs:
