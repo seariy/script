@@ -1,6 +1,8 @@
 # padavan-4.4 纯净版
 
-  ## 固件默认参数
+![](./main.jpg)
+
+## 固件默认参数
     
   - wifi名称        2.4G：PDCN        5G：PDCN_5G
   - wifi密码        1234567890
