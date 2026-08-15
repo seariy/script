@@ -66,16 +66,16 @@ jobs:
         sed -i "s/LAN4=0/LAN4=4/g" /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
 
         #echo "修改 2G 无线名称"
-        #sed -i 's/BOARD_PID "_%s"/"PDCN"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/BOARD_PID "_%s"/"PDCN"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
 
         #echo "修改 5G 无线名称"
-        #sed -i 's/BOARD_PID "_5G_%s"/"PDCN_5G"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/BOARD_PID "_5G_%s"/"PDCN_5G"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
         
         #echo "修改 2G 访客无线名称"
-        #sed -i 's/BOARD_PID "_GUEST_%s"/"GUEST"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/BOARD_PID "_GUEST_%s"/"GUEST"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
 
         #echo "修改 5G 访客无线名称"
-        #sed -i 's/BOARD_PID "_GUEST_5G_%s"/"GUEST_5G"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/BOARD_PID "_GUEST_5G_%s"/"GUEST_5G"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
 
     - name: Build Firmware
       env:
