@@ -46,6 +46,9 @@ jobs:
         sed -i 's/size_tmp="24M"/size_tmp="120M"/g' /opt/rt-n56u/trunk/user/scripts/dev_init.sh
         sed -i 's/mtd_part_size=65536/mtd_part_size=17825792/g' /opt/rt-n56u/trunk/user/scripts/mtd_storage.sh
 
+        #echo "修改 LAN IP 地址"
+        sed -i "s/192.168.2/192.168.18/g" /opt/rt-n56u/trunk/user/shared/defaults.h
+
     - name: Build Firmware
       env:
         TNAME: K2P-USB
@@ -160,11 +163,6 @@ jobs:
         sed -i '/CONFIG_FIRMWARE_WEBUI_HIDE_VPN/d' .config
         sed -i '/CONFIG_FIRMWARE_INCLUDE_OPENVPN/d' .config
         
-        ######################################################################
-        
-        #echo "修改 LAN IP 地址"
-        sed -i "s/192.168.2/192.168.18/g" /opt/rt-n56u/trunk/user/shared/defaults.h
-
         ######################################################################
         #以下选项是定义你需要的功能，（y=集成,n=忽略），重新写入到.config文件
         ######################################################################
