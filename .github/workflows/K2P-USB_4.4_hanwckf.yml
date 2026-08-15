@@ -6,10 +6,10 @@ on:
   workflow_dispatch:
   
 env:
-  src_git: https://github.com/seariy/padavan_4.4.git
+  src_git: https://github.com/hanwckf/padavan-4.4.git
   src_dir: /opt/padavan
   work_dir: /opt/padavan/trunk
-  firmware_dir: /opt/images
+  firmware_dir: /opt/firmware
   config_file: K2P-USB.config
   custom_script: custom.sh
 
@@ -43,6 +43,8 @@ jobs:
       if: (!cancelled())
       run: |
         git clone --depth=1 $src_git $src_dir
+        cd $src_dir/toolchain-mipsel && chmod +x dl_toolchain.sh
+        ./dl_toolchain.sh
     
     - name: Import Custom configs
       if: (!cancelled())
