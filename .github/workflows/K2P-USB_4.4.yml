@@ -1,12 +1,12 @@
 
 ##########  Padavan_4.4  ##########
 
-name: K2P-USB_4.4_vb1980
+name: K2P-USB_4.4
 on:
   workflow_dispatch:
   
 env:
-  src_git: https://github.com/vb1980/padavan-4.4.git
+  src_git: https://github.com/tomgiter/Padavan-4.4.git
   src_dir: /opt/padavan
   work_dir: /opt/padavan/trunk
   firmware_dir: /opt/firmware
