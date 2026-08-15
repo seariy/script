@@ -43,8 +43,6 @@ jobs:
       if: (!cancelled())
       run: |
         git clone --depth=1 $src_git $src_dir
-        cd $src_dir/toolchain-mipsel && chmod +x dl_toolchain.sh
-        ./dl_toolchain.sh
     
     - name: Import Custom configs
       if: (!cancelled())
