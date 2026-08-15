@@ -48,11 +48,18 @@ jobs:
         
         ###### echo "修改 LAN IP 地址  网口顺序"
         sed -i "s/192.168.2/192.168.18/g" /opt/rt-n56u/trunk/user/shared/defaults.h
-        sed -i 's/CONFIG_RAETH_ESW_PORT_WAN=4/CONFIG_RAETH_ESW_PORT_WAN=0/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
-        sed -i 's/CONFIG_RAETH_ESW_PORT_WAN=3/CONFIG_RAETH_ESW_PORT_WAN=1/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
-        sed -i 's/CONFIG_RAETH_ESW_PORT_WAN=2/CONFIG_RAETH_ESW_PORT_WAN=2/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
-        sed -i 's/CONFIG_RAETH_ESW_PORT_WAN=1/CONFIG_RAETH_ESW_PORT_WAN=3/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
-        sed -i 's/CONFIG_RAETH_ESW_PORT_WAN=0/CONFIG_RAETH_ESW_PORT_WAN=4/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
+        
+        sed -i 's/WAN=4/WAN=0/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
+        sed -i 's/LAN1=3/LAN1=1/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
+        sed -i 's/LAN2=2/LAN2=2/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
+        sed -i 's/LAN3=1/LAN3=3/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
+        sed -i 's/LAN4=0/LAN4=4/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
+
+        sed -i 's/WAN=4/WAN=0/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
+        sed -i 's/LAN1=3/LAN1=1/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
+        sed -i 's/LAN2=2/LAN2=2/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
+        sed -i 's/LAN3=1/LAN3=3/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
+        sed -i 's/LAN4=0/LAN4=4/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
 
     - name: Build Firmware
       env:
