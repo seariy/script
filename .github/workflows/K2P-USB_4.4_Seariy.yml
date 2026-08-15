@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
   
 env:
-  src_git: https://github.com/seariy/padavan-4.4.git
+  src_git: https://github.com/seariy/padavan_4.4.git
   src_dir: /opt/padavan
   work_dir: /opt/padavan/trunk
   firmware_dir: /opt/firmware
