@@ -1,4 +1,4 @@
-name: WIA3300-10_3.4-KVR_lmq8267
+name: WIA3300-10_3.4_lmq8267
 
 on: 
   workflow_dispatch:
