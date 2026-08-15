@@ -36,6 +36,9 @@ jobs:
         KERNEL: 3.4
       run: |
         git clone --depth=1 https://github.com/lmq8267/padavan-KVR.git /opt/rt-n56u
+        rm -rf /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap
+        cp -r /opt/rt-n56u/padavan4.4-theme/bootstrap /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed
+        
         cd /opt/rt-n56u/toolchain-mipsel
         sh dl_toolchain.sh
         mkdir -p /opt/images/
@@ -47,8 +50,7 @@ jobs:
         sed -i 's/mtd_part_size=65536/mtd_part_size=17825792/g' /opt/rt-n56u/trunk/user/scripts/mtd_storage.sh
 
         #echo "修改 LAN IP 地址"
-        sed -i "s/192.168.2/192.168.18/g" /opt/rt-n56u/trunk/user/shared/defaults.h
-
+        sed -i "s/192.168.2/192.168.123/g" /opt/rt-n56u/trunk/user/shared/defaults.h
 
         #echo "修改 网口顺序"
         sed -i "s/WAN=4/WAN=0/g" /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
@@ -62,6 +64,18 @@ jobs:
         sed -i "s/LAN2=2/LAN2=2/g" /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
         sed -i "s/LAN3=1/LAN3=3/g" /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
         sed -i "s/LAN4=0/LAN4=4/g" /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
+
+        #echo "修改 2G 无线名称"
+        #sed -i 's/BOARD_PID "_%s"/"PDCN"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+
+        #echo "修改 5G 无线名称"
+        #sed -i 's/BOARD_PID "_5G_%s"/"PDCN_5G"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        
+        #echo "修改 2G 访客无线名称"
+        #sed -i 's/BOARD_PID "_GUEST_%s"/"GUEST"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+
+        #echo "修改 5G 访客无线名称"
+        #sed -i 's/BOARD_PID "_GUEST_5G_%s"/"GUEST_5G"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
 
     - name: Build Firmware
       env:
