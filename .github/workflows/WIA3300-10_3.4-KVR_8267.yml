@@ -1,5 +1,5 @@
 ###################################################
-name: WIA3300-10_3.4-KVR
+name: WIA3300-10_3.4_lmq8267
 
 on: 
   workflow_dispatch:
@@ -35,7 +35,7 @@ jobs:
       env:
         KERNEL: 3.4
       run: |
-        git clone --depth=1 https://github.com/${GITHUB_REPOSITORY}.git /opt/rt-n56u
+        git clone --depth=1 https://github.com/lmq8267/padavan-KVR.git /opt/rt-n56u
         cd /opt/rt-n56u/toolchain-mipsel
         sh dl_toolchain.sh
         mkdir -p /opt/images/
@@ -45,6 +45,21 @@ jobs:
         sed -i 's/size_etc="6M"/size_etc="17M"/g' /opt/rt-n56u/trunk/user/scripts/dev_init.sh
         sed -i 's/size_tmp="24M"/size_tmp="120M"/g' /opt/rt-n56u/trunk/user/scripts/dev_init.sh
         sed -i 's/mtd_part_size=65536/mtd_part_size=17825792/g' /opt/rt-n56u/trunk/user/scripts/mtd_storage.sh
+        
+        ###### echo "修改 LAN IP 地址  网口顺序"
+        sed -i "s/192.168.2/192.168.123/g" /opt/rt-n56u/trunk/user/shared/defaults.h
+        
+        sed -i 's/WAN=4/WAN=0/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
+        sed -i 's/LAN1=3/LAN1=1/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
+        sed -i 's/LAN2=2/LAN2=2/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
+        sed -i 's/LAN3=1/LAN3=3/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
+        sed -i 's/LAN4=0/LAN4=4/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
+
+        sed -i 's/WAN=4/WAN=0/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
+        sed -i 's/LAN1=3/LAN1=1/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
+        sed -i 's/LAN2=2/LAN2=2/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
+        sed -i 's/LAN3=1/LAN3=3/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
+        sed -i 's/LAN4=0/LAN4=4/g' /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x.config
 
     - name: Build Firmware
       env:
@@ -58,7 +73,7 @@ jobs:
         fi
         cp -f configs/templates/$TNAME.config .config
 
-        ######  清除默认配置  ###############################################################
+        ######  清除默认配置  ##############################################
         sed -i '/CONFIG_FIRMWARE_ENABLE_IPV6/d' .config
         sed -i '/CONFIG_FIRMWARE_ENABLE_USB/d' .config
         sed -i '/CONFIG_FIRMWARE_ENABLE_UFSD/d' .config
@@ -159,11 +174,6 @@ jobs:
         sed -i '/CONFIG_FIRMWARE_INCLUDE_NPC/d' .config
         sed -i '/CONFIG_FIRMWARE_WEBUI_HIDE_VPN/d' .config
         sed -i '/CONFIG_FIRMWARE_INCLUDE_OPENVPN/d' .config
-        
-        ######################################################################
-        
-        #echo "修改 LAN IP 地址"
-        sed -i "s/192.168.2/192.168.18/g" /opt/rt-n56u/trunk/user/shared/defaults.h
 
         ######################################################################
         #以下选项是定义你需要的功能，（y=集成,n=忽略），重新写入到.config文件
@@ -448,7 +458,7 @@ jobs:
         echo "time=$(date '+%Y-%m-%d_%H%M')" >> $GITHUB_ENV
         echo "date=$(date '+%Y-%m-%d')" >> $GITHUB_ENV
 
-        sudo mv -f images/*.trx /opt/images/WIA3300-10_3.4.3.9-099_${{ env.date }}.trx
+        sudo mv -f images/*.trx /opt/images/WIA3300-10_3.4.3.9-099.trx
         cp -f .config /opt/images/${TNAME}.config
     
     - name : Upload packages
@@ -461,7 +471,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        body:  WIA3300-10_3.4-KVR 后台地址：192.168.18.1
-               固件由 K2P-USB配置文件修改参数编译
-        tag_name: WIA3300-10_3.4-KVR
+        body: |  WIA3300-10_3.4-KVR   后台地址：192.168.123.1
+           > ###  固件由 K2P-USB配置文件修改参数编译
+        tag_name: WIA3300-10_3.4-KVR_${{ env.date }}
         files: /opt/images/*.trx
