@@ -1,7 +1,7 @@
 
 ##########  Padavan_4.4  ##########
 
-name: K2P-USB_4.4_Seariy
+name: K2P-USB_4.4
 on:
   workflow_dispatch:
   
