@@ -39,7 +39,7 @@ jobs:
       run: |
         git clone --depth=1 https://github.com/lmq8267/padavan-KVR.git /opt/rt-n56u
         rm -rf /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap
-        cp -r padavan4.4-theme/bootstrap /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed
+        cp -r theme/bootstrap /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed
         
         cd /opt/rt-n56u/toolchain-mipsel
         sh dl_toolchain.sh
