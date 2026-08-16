@@ -202,101 +202,101 @@ jobs:
         ############################################################
         ### SFE    Linux kernel and toolchain
         # 启用 SFE 网络加速：提升路由转发速率，降低延迟（推荐开启，非必需但强烈建议）
-        echo "CONFIG_FIRMWARE_INCLUDE_SFE=y
+        echo "CONFIG_FIRMWARE_INCLUDE_SFE=y" >> .config
 
         ### Enable IPv6 support
         # 启用 IPv6 支持：VLESS 节点多数支持 IPv6，后续代理必需开启（必需配置）
         # 即使仅使用 IPv4 节点，开启后也不影响兼容性，避免后续修改
-        echo "CONFIG_FIRMWARE_ENABLE_IPV6=y
+        echo "CONFIG_FIRMWARE_ENABLE_IPV6=y" >> .config
 
         ### Enable USB support
         # 启用 USB 总线功能：支持 USB 存储（U盘/硬盘）、USB 网卡等外设（非必需，按需开启）
         # 若路由器无 USB 接口可设为 n，有则开启，不影响 VLESS 代理
-        echo "CONFIG_FIRMWARE_ENABLE_USB=y
+        echo "CONFIG_FIRMWARE_ENABLE_USB=y" >> .config
 
         #通过 Paragon 的 "ufsd" 驱动启用 NTFS 文件系统支持。约 0.4MB
         echo "echo "CONFIG_FIRMWARE_ENABLE_UFSD=y" >> .config
 
         ### Enable FAT/FAT32 filesystem support. ~0.1MB
         # 支持 FAT/FAT32 文件系统：U盘、移动硬盘最常用格式（必需配置，即使无 USB 也建议保留）
-        echo "CONFIG_FIRMWARE_ENABLE_FAT=y
+        echo "CONFIG_FIRMWARE_ENABLE_FAT=y" >> .config
 
         ### Enable exFAT (FAT/FAT32 too) filesystem support. ~0.12MB
         # 支持 exFAT 文件系统：大容量 U 盘/移动硬盘常用（非必需，按需开启）
         # 单文件超过 4GB 需开启，不影响 VLESS 代理
-        echo "CONFIG_FIRMWARE_ENABLE_EXFAT=y
+        echo "CONFIG_FIRMWARE_ENABLE_EXFAT=y" >> .config
 
         ### Enable EXT2 filesystem support. ~0.1MB
         # 禁用 EXT2 文件系统：老旧格式，极少使用，关闭节省固件体积（非必需）
-        echo "CONFIG_FIRMWARE_ENABLE_EXT2=n
+        echo "CONFIG_FIRMWARE_ENABLE_EXT2=n" >> .config
 
         ### Enable EXT3 filesystem support. ~0.2MB
         # 禁用 EXT3 文件系统：EXT4 已兼容 EXT3/EXT2，无需重复开启（非必需）
-        echo "CONFIG_FIRMWARE_ENABLE_EXT3=n
+        echo "CONFIG_FIRMWARE_ENABLE_EXT3=n" >> .config
 
         ### Enable EXT4 (EXT3/2 too) filesystem support. ~0.4MB
         # 支持 EXT4 文件系统：Linux 常用格式，硬盘分区首选（非必需，有 USB 硬盘则开启）
-        echo "CONFIG_FIRMWARE_ENABLE_EXT4=y
+        echo "CONFIG_FIRMWARE_ENABLE_EXT4=y" >> .config
 
         ### Enable XFS filesystem support. ~0.6MB
         # 禁用 XFS 文件系统：服务器级格式，路由器极少使用，关闭节省体积（非必需）
-        echo "CONFIG_FIRMWARE_ENABLE_XFS=n
+        echo "CONFIG_FIRMWARE_ENABLE_XFS=n" >> .config
 
         ### Enable FUSE (filesystems in userspace) support. ~0.1MB
         # 启用 FUSE 文件系统：用户态文件系统，后续 OpenClash/Clash 插件依赖（必需配置）
-        echo "CONFIG_FIRMWARE_ENABLE_FUSE=y
+        echo "CONFIG_FIRMWARE_ENABLE_FUSE=y" >> .config
 
         ### Enable swap files/partitions support. ~0.05MB
         # 禁用 SWAP 支持：路由器内存小（通常 128MB/256MB），开启后性能下降（非必需）
-        echo "CONFIG_FIRMWARE_ENABLE_SWAP=n
+        echo "CONFIG_FIRMWARE_ENABLE_SWAP=n" >> .config
 
         ### Include UVC camera modules. ~0.2MB
         # 禁用 UVC 摄像头模块：路由器极少连接摄像头，关闭节省体积（非必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_UVC=n
+        echo "CONFIG_FIRMWARE_INCLUDE_UVC=n" >> .config
 
         ### Include USB-HID modules. ~0.2MB
         # 禁用 USB-HID 模块：鼠标/键盘等外设，路由器无需使用（非必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_HID=n
+        echo "CONFIG_FIRMWARE_INCLUDE_HID=n" >> .config
 
         ### Include USB-Serial modules (e.g. pl2303). ~0.03MB
         # 禁用 USB-Serial 模块：串口设备（如调试器），普通用户无需（非必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_SERIAL=n
+        echo "CONFIG_FIRMWARE_INCLUDE_SERIAL=n" >> .config
 
         ### Include USB-Audio modules ~0.46MB
         # 禁用 USB-Audio 模块：音频设备，路由器无需使用（非必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_AUDIO=n
+        echo "CONFIG_FIRMWARE_INCLUDE_AUDIO=n" >> .config
 
         ### Include XFRM (IPsec) modules & iptables extension ~ 0.2MB
         # 禁用 XFRM 模块：IPsec VPN 相关，与 VLESS 代理无关，关闭节省体积（非必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_XFRM=n
+        echo "CONFIG_FIRMWARE_INCLUDE_XFRM=n" >> .config
 
         ### Include network QoS scheduling modules. ~0.2MB
         # 禁用 QoS 调度模块：流量控制功能，简单路由无需，关闭节省体积（非必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_QOS=n
+        echo "CONFIG_FIRMWARE_INCLUDE_QOS=n" >> .config
 
         ### Include IMQ module for shapers (a bit of performance degradation). ~0.02MB
         # 禁用 IMQ 整形模块：QoS 依赖，已禁用 QoS 则关闭（非必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_IMQ=n
+        echo "CONFIG_FIRMWARE_INCLUDE_IMQ=n" >> .config
 
         ### Include IFB module for shapers. ~0.03MB
         # 禁用 IFB 整形模块：QoS 依赖，已禁用 QoS 则关闭（非必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_IFB=n
+        echo "CONFIG_FIRMWARE_INCLUDE_IFB=n" >> .config
 
         ### Include IPSet utility and kernel modules. ~0.4MB
         # 启用 IPSet 工具：IP/域名规则匹配，后续 OpenClash 域名分流必需（必需配置）
-        echo "CONFIG_FIRMWARE_INCLUDE_IPSET=y
+        echo "CONFIG_FIRMWARE_INCLUDE_IPSET=y" >> .config
 
         ### Include NFSv3 server. ~0.6MB
         # 禁用 NFSv3 服务器：路由器作为共享服务器极少使用，关闭节省体积（非必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_NFSD=n
+        echo "CONFIG_FIRMWARE_INCLUDE_NFSD=n" >> .config
 
         ### Include NFSv3 client. ~0.5MB
         # 启用 NFSv3 客户端：访问局域网 NFS 共享文件夹（非必需，按需开启）
-        echo "CONFIG_FIRMWARE_INCLUDE_NFSC=y
+        echo "CONFIG_FIRMWARE_INCLUDE_NFSC=y" >> .config
 
         ### Include CIFS (SMB) client. ~0.2MB
         # 禁用 CIFS 客户端：访问 Windows 共享文件夹，非必需（按需开启）
-        echo "CONFIG_FIRMWARE_INCLUDE_CIFS=y
+        echo "CONFIG_FIRMWARE_INCLUDE_CIFS=y" >> .config
 
         ############################################################
         ### 3. Userspace configuration（用户态工具/插件，决定固件最终功能）
