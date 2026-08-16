@@ -507,48 +507,6 @@ jobs:
         ## DNS转发 已删除 请查看/trunk/user/httpd/common.h
         echo "CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER=n" >> .config
         
-
-        ############################################################
-        ### 4. Mihomo（Clash Meta）核心配置（保留原文件名，支持 VLESS）
-        ############################################################
-        # 启用 OpenClash 插件（trunk/user 路径集成）
-        echo "CONFIG_USER_OPENCLASH=n" >> .config
-
-        # Mihomo 核心基础配置（保留原文件名，关键！）
-        echo "CONFIG_FIRMWARE_INCLUDE_OPENCLASH=n" >> .config
-        echo "CONFIG_FIRMWARE_INCLUDE_CLASH_CORE=n" >> .config
-        echo "CONFIG_FIRMWARE_CLASH_CORE_TYPE="Clash.Meta-linux-mipsle-softfloat-v1.10.0"" >> .config  # 与核心原文件名完全一致
-        echo "CONFIG_FIRMWARE_INCLUDE_CLASH_PREMIUM=n" >> .config  # 禁用 Premium，Mihomo 单核心已含增强功能
-
-        # 分流规则配置（自动更新，无需手动维护）
-        echo "CONFIG_FIRMWARE_INCLUDE_OPENCLASH_RULES=n" >> .config
-        echo "CONFIG_FIRMWARE_INCLUDE_GFWLIST=n" >> .config  # 需代理域名列表
-        echo "CONFIG_FIRMWARE_INCLUDE_CHINALIST=n" >> .config  # 国内直连域名列表
-
-        ############################################################
-        ### 5. 依赖插件启用（trunk/user 目录下的必需依赖）
-        ############################################################
-        # SmartDNS：DNS 分流、污染解决（OpenClash 必需）
-        echo "CONFIG_USER_SMARTDNS=n" >> .config
-        
-        # jq：JSON 配置解析（订阅链接解析必需）
-        echo "CONFIG_USER_JQ=n" >> .config
-        
-        # base64：订阅链接解码（必需）
-        echo "CONFIG_USER_BASE64=n" >> .config
-
-        ############################################################
-        ### 6. 内核级依赖补充（Mihomo + VLESS 运行必需）
-        ############################################################
-        # TUN 模块：Mihomo TUN 模式支持（VLESS + WS/GRPC 传输必需）
-        echo "CONFIG_FIRMWARE_ENABLE_TUN=n" >> .config
-        
-        # TProxy 模块：透明代理底层支持（路由器全局代理必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_TPROXY=n" >> .config
-        
-        # iptables 扩展：防火墙规则支持（分流、代理转发必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_IPTABLES_EXT=y" >> .config
-        
         ######################################################################
         
         ######################################################################
