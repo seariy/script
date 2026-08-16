@@ -554,13 +554,12 @@ jobs:
         sudo ./build_firmware_modify $TNAME 0
         sudo mv -f images/*.trx /opt/images/K2P-USB_3.4.3.9-099.trx
         cp -f .config /opt/images/${TNAME}.config
-        echo "time=$(date '+%Y-%m-%d_%H%M')" >> $GITHUB_ENV
         echo "date=$(date '+%Y-%m-%d')" >> $GITHUB_ENV
     
     - name : Upload packages
       uses: actions/upload-artifact@master
       with:
-        name: K2P-USB_3.4-KVR_${{ env.time }}
+        name: K2P-USB_3.4-KVR_${{ env.date }}
         path: /opt/images
 
     - name: Release
@@ -569,5 +568,5 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         body:  K2P-USB_3.4-KVR 后台地址：192.168.123.1
                固件由 K2P-USB配置文件修改参数编译
-        tag_name: K2P-USB_3.4-KVR_${{ env.time }}
+        tag_name: K2P-USB_3.4-KVR_${{ env.date }}
         files: /opt/images/*.trx
