@@ -1,7 +1,7 @@
 ##################################################
 ######      K2P+USB   测试正常               ######
 ##################################################
-name: WIA3300-10_3.4-KVR
+name: WIA3300-10_3.4-KVR_Seariy
 
 on: 
   workflow_dispatch:
@@ -621,5 +621,5 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         body:  WIA3300-10_3.4-KVR 后台地址：192.168.123.1
                固件由 K2P-USB配置文件修改参数编译
-        tag_name: WIA3300-10_3.4-KVR_${{ env.time }}
+        tag_name: Seariy_${{ env.date }}
         files: /opt/images/*.trx
