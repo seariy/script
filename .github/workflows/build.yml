@@ -281,7 +281,7 @@ jobs:
 
         ### Include IPSet utility and kernel modules. ~0.4MB
         # 启用 IPSet 工具：IP/域名规则匹配，后续 OpenClash 域名分流必需（必需配置）
-        echo "CONFIG_FIRMWARE_INCLUDE_IPSET=y" >> .config
+        echo "CONFIG_FIRMWARE_INCLUDE_IPSET=n" >> .config
 
         ### Include NFSv3 server. ~0.6MB
         # 禁用 NFSv3 服务器：路由器作为共享服务器极少使用，关闭节省体积（非必需）
@@ -310,7 +310,7 @@ jobs:
 
         ### Include LPR printer daemon. ~0.12MB
         # 启用 LPR 打印机守护进程：连接网络打印机需开启，否则可关闭（非必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_LPRD=y" >> .config
+        echo "CONFIG_FIRMWARE_INCLUDE_LPRD=n" >> .config
 
         ### Include USB-over-Ethernet printer daemon. ~0.05MB
         # 禁用 USB-以太网打印机 daemon：极少使用，关闭节省体积（非必需）
@@ -318,7 +318,7 @@ jobs:
 
         ### Include "tcpdump" utility. ~0.6MB
         # 启用 tcpdump 工具：网络抓包，后续调试 VLESS 代理连接问题必需（推荐开启，非必需但实用）
-        echo "CONFIG_FIRMWARE_INCLUDE_TCPDUMP=y" >> .config
+        echo "CONFIG_FIRMWARE_INCLUDE_TCPDUMP=n" >> .config
 
         ### Include "hdparm" utility (allow set HDD spindown timeout and APM). ~0.1MB
         # 禁用 hdparm 工具：硬盘参数设置，路由器无需使用（非必需）
@@ -374,7 +374,7 @@ jobs:
 
         ### Include OpenVPN. IPv6 required. openssl ~1.2MB, openvpn ~0.4MB
         # 启用 OpenVPN：VPN 客户端/服务端，与 VLESS 代理不冲突（非必需，按需开启）
-        echo "CONFIG_FIRMWARE_INCLUDE_OPENVPN=y" >> .config
+        echo "CONFIG_FIRMWARE_INCLUDE_OPENVPN=n" >> .config
 
         ### Include StrongSwan. XFRM modules ~0.2MB, strongswan ~0.7MB
         # 禁用 StrongSwan：IPsec VPN 工具，与 VLESS 无关，关闭节省体积（非必需）
@@ -450,7 +450,7 @@ jobs:
         echo "CONFIG_FIRMWARE_INCLUDE_SOFTETHERVPN_CMD=n" >> .config
 
         # 启用 VLMCSD：KMS 激活工具，按需开启（非必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_VLMCSD=y" >> .config
+        echo "CONFIG_FIRMWARE_INCLUDE_VLMCSD=n" >> .config
 
         # 启用 ttyd：Web 终端，远程管理路由器（推荐开启，非必需但实用）
         echo "CONFIG_FIRMWARE_INCLUDE_TTYD=y" >> .config
@@ -465,7 +465,7 @@ jobs:
         echo "CONFIG_FIRMWARE_INCLUDE_NANO=y" >> .config
 
         # 启用 iperf3：网络测速工具，调试 VLESS 代理网速（推荐开启，非必需但实用）
-        echo "CONFIG_FIRMWARE_INCLUDE_IPERF3=y" >> .config
+        echo "CONFIG_FIRMWARE_INCLUDE_IPERF3=n" >> .config
 
         # 禁用 dump1090：飞机雷达接收工具，无需使用（非必需）
         echo "CONFIG_FIRMWARE_INCLUDE_DUMP1090=n" >> .config
@@ -474,10 +474,10 @@ jobs:
         echo "CONFIG_FIRMWARE_INCLUDE_RTL_SDR=n" >> .config
 
         # 启用 mtr：网络路由跟踪工具，调试 VLESS 代理连接路径（推荐开启，非必需但实用）
-        echo "CONFIG_FIRMWARE_INCLUDE_MTR=y" >> .config
+        echo "CONFIG_FIRMWARE_INCLUDE_MTR=n" >> .config
 
         # 启用 socat：端口转发/网络中继，调试 VLESS 端口问题（推荐开启，非必需但实用）
-        echo "CONFIG_FIRMWARE_INCLUDE_SOCAT=y" >> .config
+        echo "CONFIG_FIRMWARE_INCLUDE_SOCAT=n" >> .config
 
         # 启用 srelay：简单中继工具，按需开启（非必需）
         echo "CONFIG_FIRMWARE_INCLUDE_SRELAY=y" >> .config
@@ -541,10 +541,10 @@ jobs:
         ### 6. 内核级依赖补充（Mihomo + VLESS 运行必需）
         ############################################################
         # TUN 模块：Mihomo TUN 模式支持（VLESS + WS/GRPC 传输必需）
-        echo "CONFIG_FIRMWARE_ENABLE_TUN=y" >> .config
+        echo "CONFIG_FIRMWARE_ENABLE_TUN=n" >> .config
         
         # TProxy 模块：透明代理底层支持（路由器全局代理必需）
-        echo "CONFIG_FIRMWARE_INCLUDE_TPROXY=y" >> .config
+        echo "CONFIG_FIRMWARE_INCLUDE_TPROXY=n" >> .config
         
         # iptables 扩展：防火墙规则支持（分流、代理转发必需）
         echo "CONFIG_FIRMWARE_INCLUDE_IPTABLES_EXT=y" >> .config
@@ -555,7 +555,6 @@ jobs:
         echo "CONFIG_FIRMWARE_INCLUDE_VNTCLI=n" >> .config #vnt客户端 约80k
         echo "CONFIG_FIRMWARE_INCLUDE_VNTS=n" >> .config #vnt服务端 约50k
         echo "CONFIG_FIRMWARE_INCLUDE_CLOUDFLARED=y" >> .config #CF的隧道 约50k
-        echo "CONFIG_FIRMWARE_INCLUDE_WIREGUARD=y" >> .config  ## wireguard 约1M
         echo "CONFIG_FIRMWARE_INCLUDE_CLOUDFLARE=y" >> .config #CF-ddns 约50k
         echo "CONFIG_FIRMWARE_INCLUDE_ZEROTIER=y" >> .config ## zerotier 约 20k
         echo "CONFIG_FIRMWARE_INCLUDE_TUNSAFE=n" >> .config ## tunsafe（wireguard的TCP方式）
