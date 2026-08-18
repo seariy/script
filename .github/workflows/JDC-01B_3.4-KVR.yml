@@ -489,6 +489,6 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         body:  JDC-01B_3.4-KVR 后台地址：192.168.68.1
-               固件由 K2P-USB配置文件修改参数编译
+               
         tag_name: JDC-01B_3.4-KVR_${{ env.time }}
         files: *.zip
