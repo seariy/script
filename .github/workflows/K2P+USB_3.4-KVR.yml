@@ -484,11 +484,20 @@ jobs:
         name: K2P-USB_3.4-KVR_${{ env.time }}
         path: /opt/images
 
+    - name: Zip files
+      run: |
+        cd /opt/images
+        zip -r K2P-USB_3.4-KVR_${{ env.time }}.zip *.trx
+        
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        body:  K2P-USB_3.4-KVR 后台地址：192.168.123.1
-               固件由 K2P-USB配置文件修改参数编译
-        tag_name: K2P-USB_3.4-KVR_${{ env.time }}
-        files: /opt/images/*.trx
+        body: | 
+                - JDC-01B_3.4-KVR
+                - K2P-USB
+                - WIA3300-10
+                - JCG-836PRO
+               
+        tag_name: Padavan_3.4-KVR
+        files: /opt/images/*.zip
