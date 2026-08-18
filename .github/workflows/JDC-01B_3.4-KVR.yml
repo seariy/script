@@ -484,6 +484,9 @@ jobs:
         name: JDC-01B_3.4-KVR_${{ env.time }}
         path: /opt/images
 
+    - name: Zip files
+      run: zip -r JDC-01B_3.4-KVR_${{ env.time }}.zip /opt/images/*.trx
+
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
