@@ -485,13 +485,15 @@ jobs:
         path: /opt/images
 
     - name: Zip files
-      run: zip -r JDC-01B_3.4-KVR_${{ env.time }}.zip /opt/images/*.trx
+      run: |
+        cd /opt/images
+        zip -r JDC-01B_3.4-KVR_${{ env.time }}.zip *.trx
 
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        body:  JDC-01B_3.4-KVR 后台地址：192.168.68.1
+        body: JDC-01B_3.4-KVR 后台地址：192.168.68.1
                
         tag_name: JDC-01B_3.4-KVR_${{ env.time }}
         files: /opt/images/*.zip
