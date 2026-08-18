@@ -81,7 +81,7 @@ jobs:
 
     - name: Build Firmware
       env:
-        TNAME: JDC-01B
+        TNAME: JDC-1
         KERNEL: 3.4
       run: |
         cd /opt/rt-n56u/trunk
