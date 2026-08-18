@@ -496,5 +496,5 @@ jobs:
         body: | 
                 - K2P-USB
                 
-        tag_name: K2P-USB_3.4-KVR_${{ env.date }}
+        tag_name: K2P-USB_3.4-KVR
         files: /opt/images/*.zip
