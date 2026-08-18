@@ -495,5 +495,5 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         body: | 
                 - 后台地址:  192.168.18.1
-        tag_name: WIA3300-10_3.4-KVR_${{ env.date }}
+        tag_name: WIA3300-10_3.4-KVR
         files: /opt/images/*.zip
