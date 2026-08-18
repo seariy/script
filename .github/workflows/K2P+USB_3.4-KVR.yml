@@ -494,10 +494,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         body: | 
-                - JDC-01B_3.4-KVR
                 - K2P-USB
-                - WIA3300-10
-                - JCG-836PRO
-               
-        tag_name: Padavan_3.4-KVR
+                
+        tag_name: K2P-USB_3.4-KVR_${{ env.date }}
         files: /opt/images/*.zip
