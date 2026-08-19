@@ -38,8 +38,8 @@ jobs:
         KERNEL: 3.4
       run: |
         git clone --depth=1 https://github.com/lmq8267/padavan-KVR.git /opt/rt-n56u
-        #rm -rf /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap
-        #cp -r theme/bootstrap /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed
+        rm -rf /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap
+        cp -r theme/bootstrap /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed
         
         cd /opt/rt-n56u/toolchain-mipsel
         sh dl_toolchain.sh
@@ -202,9 +202,6 @@ jobs:
         
         #启用 USB 支持
         echo "CONFIG_FIRMWARE_ENABLE_USB=y" >> .config
-        
-        #启用 USB_STORAGE 支持
-        echo "CONFIG_FIRMWARE_INCLUDE_USB_STORAGE=y" >> .config
         
         #通过 Paragon 的 "ufsd" 驱动启用 NTFS 文件系统支持。约 0.4MB
         echo "CONFIG_FIRMWARE_ENABLE_UFSD=y" >> .config
