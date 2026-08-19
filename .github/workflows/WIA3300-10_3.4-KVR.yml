@@ -203,6 +203,9 @@ jobs:
         #启用 USB 支持
         echo "CONFIG_FIRMWARE_ENABLE_USB=y" >> .config
         
+        #启用 USB_STORAGE 支持
+        echo "CONFIG_FIRMWARE_INCLUDE_USB_STORAGE=y" >> .config
+        
         #通过 Paragon 的 "ufsd" 驱动启用 NTFS 文件系统支持。约 0.4MB
         echo "CONFIG_FIRMWARE_ENABLE_UFSD=y" >> .config
         
