@@ -228,9 +228,9 @@ jobs:
         echo "CONFIG_FIRMWARE_ENABLE_FUSE=y" >> .config
 
 
-        CONFIG_FIRMWARE_ENABLE_FS_NTFS=y
-        CONFIG_FIRMWARE_INCLUDE_AIDISK=y
-        CONFIG_FIRMWARE_INCLUDE_DDNS=y
+        echo "CONFIG_FIRMWARE_ENABLE_FS_NTFS=y" >> .config
+        echo "CONFIG_FIRMWARE_INCLUDE_AIDISK=y" >> .config
+        echo "CONFIG_FIRMWARE_INCLUDE_DDNS=y" >> .config
         
 
         ##启用交换文件/分区支持。约 0.05MB
