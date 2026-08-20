@@ -430,8 +430,8 @@ jobs:
         echo "CONFIG_FIRMWARE_INCLUDE_MENTOHUST=n" >> .config
 
         ##################################
-        echo "CONFIG_FIRMWARE_INCLUDE_VNTCLI=n" >> .config #vnt客户端 约80k
-        echo "CONFIG_FIRMWARE_INCLUDE_VNTS=n" >> .config #vnt服务端 约50k
+        echo "CONFIG_FIRMWARE_INCLUDE_VNTCLI=y" >> .config #vnt客户端 约80k
+        echo "CONFIG_FIRMWARE_INCLUDE_VNTS=y" >> .config #vnt服务端 约50k
         echo "CONFIG_FIRMWARE_INCLUDE_CLOUDFLARED=y" >> .config #CF的隧道 约50k
         echo "CONFIG_FIRMWARE_INCLUDE_WIREGUARD=y" >> .config  ## wireguard 约1M
         echo "CONFIG_FIRMWARE_INCLUDE_CLOUDFLARE=y" >> .config #CF-ddns 约50k
