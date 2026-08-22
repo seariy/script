@@ -52,7 +52,7 @@ jobs:
         sed -i 's/mtd_part_size=65536/mtd_part_size=17825792/g' /opt/rt-n56u/trunk/user/scripts/mtd_storage.sh
 
         #echo "修改 LAN IP 地址"
-        sed -i "s/192.168.2/192.168.18/g" /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i "s/192.168.2/192.168.19/g" /opt/rt-n56u/trunk/user/shared/defaults.h
 
         #echo "修改 网口顺序"
         sed -i "s/WAN=4/WAN=0/g" /opt/rt-n56u/trunk/configs/boards/K2P-USB/kernel-3.4.x-5.0.config
