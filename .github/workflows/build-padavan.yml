@@ -94,7 +94,7 @@ jobs:
         run: |
           cd /opt/padavan/toolchain
           # 1. Check if toolchain binaries already exist (from cache or repo)
-          if [ -f "toolchain-4.4.x/bin/mipsel-linux-uclibc-gcc" ] || [ -f "toolchain-3.4.x/bin/mipsel-linux-uclibc-gcc" ]; then
+          if [ -f "toolchain-4.4.x/bin/mipsel-linux-uclibc-gcc" ]; then
             echo ">> Reusing cached MT7621 GCC toolchain successfully!"
           # 2. Fast download prebuilt toolchain if script exists (preferred in TurBoTse/Padavan)
           elif [ -f "dl_toolchain.sh" ]; then
