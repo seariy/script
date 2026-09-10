@@ -33,15 +33,15 @@ on:
     tags:
       - 'v*'
 
-  env:
-    SRC_REPO: 'https://github.com/TurBoTse/padavan.git'
-    SRC_BRANCH: 'master'
-    TARGET_MODEL: '${{ github.event.inputs.target_model || \'K2P-USB\' }}'
-    ENABLE_AP_IP_FIX: true
-    ENABLE_WIREGUARD: true
-    ENABLE_CLOUDFLARED: true
-    ENABLE_CADDY: true
-    ENABLE_VNT: true
+    env:
+      SRC_REPO: 'https://github.com/TurBoTse/padavan.git'
+      SRC_BRANCH: 'master'
+      TARGET_MODEL: '${{ github.event.inputs.target_model || \'K2P-USB\' }}'
+      ENABLE_AP_IP_FIX: true
+      ENABLE_WIREGUARD: true
+      ENABLE_CLOUDFLARED: true
+      ENABLE_CADDY: true
+      ENABLE_VNT: true
 
 jobs:
   build:
