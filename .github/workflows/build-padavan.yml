@@ -35,7 +35,7 @@ on:
 
 env:
   SRC_REPO: 'https://github.com/TurBoTse/padavan.git'
-  SRC_BRANCH: 'master'
+  SRC_BRANCH: 'main'
   DEFAULT_TARGET: 'K2P-USB'
   ENABLE_AP_IP_FIX: 'true'
   ENABLE_FREE_MEM_BTN: 'true'
