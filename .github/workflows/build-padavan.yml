@@ -1,0 +1,263 @@
+name: Build Padavan 4.4 Firmware
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_model:
+        description: 'Target Router Model (目标路由器型号)'
+        required: true
+        default: 'K2P-USB'
+        type: choice
+        options:
+          - K2P-USB
+          - K2P
+          - K2P_nano-512M
+          - NEWIFI3
+          - MI-3
+      build_toolchain_cache:
+        description: 'Use Toolchain Cache (启用交叉编译工具链缓存)'
+        required: false
+        default: true
+        type: boolean
+      enable_upx:
+        description: 'Compress Binaries with UPX (启用 UPX 极限固件体积压缩)'
+        required: false
+        default: true
+        type: boolean
+      upload_release:
+        description: 'Publish GitHub Release (自动发布 Release 并附带固件校验码)'
+        required: false
+        default: true
+        type: boolean
+  push:
+    tags:
+      - 'v*'
+
+env:
+  SRC_REPO: 'https://github.com/TurBoTse/padavan.git'
+  SRC_BRANCH: 'master'
+  DEFAULT_TARGET: 'K2P-USB'
+  ENABLE_AP_IP_FIX: 'true'
+  ENABLE_FREE_MEM_BTN: 'true'
+  ENABLE_WIREGUARD: 'true'
+  ENABLE_CLOUDFLARED: 'true'
+  ENABLE_CADDY: 'true'
+  ENABLE_VNT: 'true'
+
+jobs:
+  build:
+    name: Compile ${{ inputs.target_model || 'K2P-USB' }}
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    env:
+      TARGET_MODEL: ${{ inputs.target_model || 'K2P-USB' }}
+
+    steps:
+      - name: Checkout Workstation Repository
+        uses: actions/checkout@v4
+
+      - name: Free Disk Space and Prepare Ubuntu Environment
+        run: |
+          sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /usr/local/lib/android
+          sudo -E apt-get -q=2 update
+          sudo -E apt-get -y purge azure-cli ghc* zsync llvm* firefox google* dotnet* powershell openjdk* mysql* php* mongodb*
+          sudo -E apt-get --no-install-recommends -y install \
+            build-essential gawk pkg-config gettext automake autoconf libtool libtool-bin \
+            bison flex zlib1g-dev libgmp-dev libmpfr-dev libmpc-dev libncurses-dev \
+            libncursesw5-dev libudev-dev autopoint libltdl-dev libglib2.0-dev upx-ucl \
+            libelf-dev xz-utils curl wget rsync jq fakeroot libssl-dev ccache \
+            gperf cmake xxd cpio texinfo help2man nano
+          sudo -E apt-get --no-install-recommends -y install libncurses5 || true
+          sudo timedatectl set-timezone "Asia/Shanghai"
+
+      - name: Clone TurBoTse Padavan Source
+        run: |
+          sudo mkdir -p /opt/padavan
+          sudo chown -R $USER:$USER /opt/padavan
+          git clone --depth=1 ${SRC_BRANCH:+--branch $SRC_BRANCH} ${SRC_REPO} /opt/padavan || git clone --depth=1 ${SRC_REPO} /opt/padavan
+          cd /opt/padavan
+          echo "PADAVAN_COMMIT_ID=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "BUILD_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+
+      - name: Cache Cross-Compilation Toolchain
+        if: ${{ github.event.inputs.build_toolchain_cache != 'false' }}
+        id: cache-toolchain
+        uses: actions/cache@v4
+        with:
+          path: |
+            /opt/padavan/toolchain-mipsel/toolchain-4.4.x
+            /opt/padavan/toolchain-mipsel/toolchain-3.4.x
+          key: padavan-4.4-mt7621-toolchain-v3
+
+      - name: Prepare Cross-Compilation Toolchain (MT7621 mipsel-linux-uclibc)
+        run: |
+          cd /opt/padavan/toolchain-mipsel
+          # 1. Check if toolchain binaries already exist (from cache or repo)
+          if [ -f "toolchain-4.4.x/bin/mipsel-linux-uclibc-gcc" ] || [ -f "toolchain-3.4.x/bin/mipsel-linux-uclibc-gcc" ]; then
+            echo ">> Reusing cached MT7621 GCC toolchain successfully!"
+          # 2. Fast download prebuilt toolchain if script exists (preferred in TurBoTse/Padavan)
+          elif [ -f "dl_toolchain.sh" ]; then
+            echo ">> Downloading official prebuilt MT7621 toolchain via dl_toolchain.sh..."
+            chmod +x dl_toolchain.sh
+            ./dl_toolchain.sh
+          # 3. Fallback: compile toolchain from source
+          elif [ -f "build_toolchain" ]; then
+            echo ">> Building toolchain from source via build_toolchain..."
+            chmod +x build_toolchain
+            ./clean_sources.sh 2>/dev/null || true
+            ./build_toolchain
+          elif [ -f "build_toolchain.sh" ]; then
+            echo ">> Building toolchain from source via build_toolchain.sh..."
+            chmod +x build_toolchain.sh
+            ./clean_sources.sh 2>/dev/null || true
+            ./build_toolchain.sh
+          fi
+
+          # Verify toolchain availability
+          GCC_BIN=$(find . -name "mipsel-linux-uclibc-gcc" 2>/dev/null | head -n 1)
+          if [ -n "$GCC_BIN" ] && [ -x "$GCC_BIN" ]; then
+            echo ">> Toolchain ready: $GCC_BIN"
+            $GCC_BIN --version || true
+          else
+            echo ">> ERROR: Toolchain mipsel-linux-uclibc-gcc could not be found or built!"
+            ls -la
+            exit 1
+          fi
+
+      - name: Apply Board Template & Custom Kernel Config
+        run: |
+          cd /opt/padavan/trunk
+          # Copy our custom K2P-USB config into tree
+          if [ -f "$GITHUB_WORKSPACE/configs/${TARGET_MODEL}.config" ]; then
+            cp -f "$GITHUB_WORKSPACE/configs/${TARGET_MODEL}.config" "configs/templates/${TARGET_MODEL}.config"
+          fi
+
+          # Ensure WireGuard kernel flags are enabled if requested
+          if [ "$ENABLE_WIREGUARD" = "true" ]; then
+            echo "CONFIG_FIRMWARE_INCLUDE_WIREGUARD=y" >> configs/templates/${TARGET_MODEL}.config
+            echo "CONFIG_FIRMWARE_INCLUDE_WIREGUARD_TOOLS=y" >> configs/templates/${TARGET_MODEL}.config
+            
+            # Find matching kernel config file for board
+            KERNEL_CFG=""
+            for candidate in \
+              "configs/boards/${TARGET_MODEL}/kernel-4.4.x.config" \
+              "configs/boards/${TARGET_MODEL%-*}/kernel-4.4.x.config" \
+              "configs/boards/K2P/kernel-4.4.x.config"; do
+              if [ -f "$candidate" ]; then
+                KERNEL_CFG="$candidate"
+                break
+              fi
+            done
+            if [ -n "$KERNEL_CFG" ]; then
+              echo ">> Enabling WireGuard & UDP/IP tunnel in $KERNEL_CFG..."
+              sed -i 's/# CONFIG_WIREGUARD is not set/CONFIG_WIREGUARD=y/' "$KERNEL_CFG"
+              sed -i 's/# CONFIG_NET_UDP_TUNNEL is not set/CONFIG_NET_UDP_TUNNEL=y/' "$KERNEL_CFG"
+              sed -i 's/# CONFIG_NET_IP_TUNNEL is not set/CONFIG_NET_IP_TUNNEL=y/' "$KERNEL_CFG"
+            fi
+          fi
+
+      - name: Apply AP Mode Auto IP Renewal Fix Patch
+        if: ${{ env.ENABLE_AP_IP_FIX == 'true' }}
+        run: |
+          echo ">> Applying AP mode dynamic DHCP & IP auto-renewal fix..."
+          chmod +x "$GITHUB_WORKSPACE/scripts/fix_ap_ip.sh"
+          "$GITHUB_WORKSPACE/scripts/fix_ap_ip.sh" /opt/padavan
+
+      - name: Transform Top-Right Shutdown Button into Free Memory (释放内存)
+        if: ${{ env.ENABLE_FREE_MEM_BTN == 'true' }}
+        run: |
+          echo ">> Transforming top-right shutdown button into Free Memory (释放内存)..."
+          chmod +x "$GITHUB_WORKSPACE/scripts/patch_webui.sh"
+          "$GITHUB_WORKSPACE/scripts/patch_webui.sh" /opt/padavan
+
+      - name: Integrate Prebuilt Plugins (Cloudflared, Caddy, VNT)
+        run: |
+          echo ">> Integrating requested plugins (Cloudflared, Caddy, VNT)..."
+          chmod +x "$GITHUB_WORKSPACE/scripts/install_plugins.sh"
+          "$GITHUB_WORKSPACE/scripts/install_plugins.sh" /opt/padavan ${{ github.event.inputs.enable_upx || 'true' }}
+
+      - name: Compile Padavan Firmware
+        run: |
+          cd /opt/padavan/trunk
+          # Clean build tree safely
+          if [ -f "./clear_tree" ]; then
+            chmod +x ./clear_tree
+            ./clear_tree
+          elif [ -f "./clear_tree.sh" ]; then
+            chmod +x ./clear_tree.sh
+            ./clear_tree.sh
+          fi
+
+          # Ensure execute permissions
+          chmod +x ./build_firmware* 2>/dev/null || true
+
+          # Build firmware for target model (support both script naming styles)
+          if [ -f "./build_firmware_modify" ]; then
+            fakeroot ./build_firmware_modify ${TARGET_MODEL}
+          elif [ -f "./build_firmware_modify.sh" ]; then
+            fakeroot ./build_firmware_modify.sh ${TARGET_MODEL}
+          elif [ -f "./build_firmware" ]; then
+            fakeroot ./build_firmware ${TARGET_MODEL}
+          else
+            make ${TARGET_MODEL}
+          fi
+
+      - name: Inspect and Organize Firmware Images
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/release_firmware
+          cd /opt/padavan/trunk/images
+          ls -lh
+          for file in *.trx *.bin; do
+            if [ -f "$file" ]; then
+              echo ">> Packaging firmware artifact: $file"
+              md5sum "$file" > "${file}.md5"
+              sha256sum "$file" > "${file}.sha256"
+              cp -f "$file" "${file}.md5" "${file}.sha256" $GITHUB_WORKSPACE/release_firmware/
+            fi
+          done
+          # Copy active config for audit
+          [ -f /opt/padavan/trunk/.config ] && cp -f /opt/padavan/trunk/.config $GITHUB_WORKSPACE/release_firmware/${TARGET_MODEL}_${BUILD_DATE}.config
+          
+          # Verify that firmware was built
+          IMAGE_COUNT=$(find $GITHUB_WORKSPACE/release_firmware/ -type f ( -name "*.trx" -o -name "*.bin" ) | wc -l)
+          if [ "$IMAGE_COUNT" -eq 0 ]; then
+            echo ">> ERROR: No firmware images (.trx or .bin) were found after compilation!"
+            exit 1
+          fi
+
+      - name: Upload Firmware to GitHub Actions Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Padavan-4.4-${{ env.TARGET_MODEL }}-${{ env.BUILD_DATE }}
+          path: release_firmware/*
+
+      - name: Publish GitHub Release
+        if: ${{ github.event.inputs.upload_release != 'false' || startsWith(github.ref, 'refs/tags/') }}
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: Padavan-4.4-${{ env.BUILD_DATE }}-${{ env.TARGET_MODEL }}
+          name: Padavan 4.4 ${{ env.TARGET_MODEL }} (AP-Fix + Plugins)
+          draft: false
+          prerelease: false
+          body: |
+            ### Padavan 4.4 自动化构建固件 (基于 TurBoTse/padavan)
+            - **目标机型**: `${{ env.TARGET_MODEL }}` (MediaTek MT7621)
+            - **源码版本**: TurBoTse/padavan @ `${{ env.PADAVAN_COMMIT_ID }}`
+            - **构建日期**: ${{ env.BUILD_DATE }}
+            - **集成插件状态**:
+              - WireGuard: `✅ 已集成 (Kernel 4.4原生支持)`
+              - Cloudflared: `✅ 已集成 (Argo Tunnel内网穿透)`
+              - Caddy: `✅ 已集成 (反向代理与Web服务)`
+              - VNT: `✅ 已集成 (Virtual Network Tunnel组网)`
+            - **关键补丁与优化**:
+              - AP 模式自动获取与更新 IP 补丁: `✅ 已修复 (支持上级网段切换/DHCP租约自适应/Web免失联)`
+              - Web UI 右上角关机虚拟按钮: `✅ 已改造为「释放内存」(解决K2P无法软关机、一键释放Cache/Buffers)`
+            - **刷机与默认信息**:
+              - 默认管理地址: `192.168.2.1` (AP模式下自动同步为上级主路由分配的动态 IP，支持通过 `http://my.router` 直接访问)
+              - 默认管理账号: `admin`
+              - 默认管理密码: `admin`
+              - 默认 WiFi 名称: `PDCN` / `PDCN_5G` (密码: `1234567890`)
+          files: release_firmware/*
