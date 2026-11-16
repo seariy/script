@@ -44,8 +44,8 @@ jobs:
         cd /opt/rt-n56u/toolchain-mipsel
         sh dl_toolchain.sh
         mkdir -p /opt/images/
-
-        sed -i 's/=y/=n/g' *.config
+        
+        sed -i 's/=y/=n/g' /opt/rt-n56u/trunk/configs/templates/WDR7300.config
         #echo "修改 LAN IP 地址"
         sed -i "s/192.168.2/192.168.10/g" /opt/rt-n56u/trunk/user/shared/defaults.h
 
