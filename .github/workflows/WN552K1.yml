@@ -108,5 +108,5 @@ jobs:
         body: | 
                 - WN552K1
                
-        tag_name: WN551K1_3.4-KVR
+        tag_name: WN552K1_3.4-KVR
         files: /opt/images/*.zip
