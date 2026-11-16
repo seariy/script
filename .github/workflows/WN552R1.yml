@@ -52,16 +52,16 @@ jobs:
         #echo "#define BOARD_ROLE_REPEATER	1" >> ./configs/boards/RM2100/board.h
         
         #echo "修改 2G 无线名称"
-        sed -i 's/BOARD_PID "_%s"/"WAVLINK-N"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/BOARD_PID "_%s"/"ASUS"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
 
         #echo "修改 5G 无线名称"
-        sed -i 's/BOARD_PID "_5G_%s"/"WAVLINK-AC"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/BOARD_PID "_5G_%s"/"ASUS_AC"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
         
         #echo "修改 2G 访客无线名称"
         sed -i 's/BOARD_PID "_GUEST_%s"/"GUEST"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
 
         #echo "修改 5G 访客无线名称"
-        sed -i 's/BOARD_PID "_GUEST_5G_%s"/"GUEST_5G"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/BOARD_PID "_GUEST_5G_%s"/"GUEST_AC"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
 
         #echo "修改 无线密码"
         sed -i 's/1234567890/abcd1234/g' /opt/rt-n56u/trunk/user/shared/defaults.h
