@@ -48,19 +48,6 @@ jobs:
         #echo "修改 LAN IP 地址"
         sed -i "s/192.168.2/192.168.10/g" /opt/rt-n56u/trunk/user/shared/defaults.h
 
-        #echo "修改 网口顺序"
-        #sed -i "s/WAN=4/WAN=0/g" /opt/rt-n56u/trunk/configs/boards/JCG-836PRO/kernel-3.4.x-5.0.config
-        #sed -i "s/LAN1=3/LAN1=1/g" /opt/rt-n56u/trunk/configs/boards/JCG-836PRO/kernel-3.4.x-5.0.config
-        #sed -i "s/LAN2=2/LAN2=2/g" /opt/rt-n56u/trunk/configs/boards/JCG-836PRO/kernel-3.4.x-5.0.config
-        #sed -i "s/LAN3=1/LAN3=3/g" /opt/rt-n56u/trunk/configs/boards/JCG-836PRO/kernel-3.4.x-5.0.config
-        #sed -i "s/LAN4=0/LAN4=4/g" /opt/rt-n56u/trunk/configs/boards/JCG-836PRO/kernel-3.4.x-5.0.config
-
-        #sed -i "s/WAN=4/WAN=0/g" /opt/rt-n56u/trunk/configs/boards/JCG-836PRO/kernel-3.4.x.config
-        #sed -i "s/LAN1=3/LAN1=1/g" /opt/rt-n56u/trunk/configs/boards/JCG-836PRO/kernel-3.4.x.config
-        #sed -i "s/LAN2=2/LAN2=2/g" /opt/rt-n56u/trunk/configs/boards/JCG-836PRO/kernel-3.4.x.config
-        #sed -i "s/LAN3=1/LAN3=3/g" /opt/rt-n56u/trunk/configs/boards/JCG-836PRO/kernel-3.4.x.config
-        #sed -i "s/LAN4=0/LAN4=4/g" /opt/rt-n56u/trunk/configs/boards/JCG-836PRO/kernel-3.4.x.config
-
         #echo "默认设置为 AP模式"
         #echo "#define BOARD_ROLE_REPEATER	1" >> ./configs/boards/RM2100/board.h
         
@@ -101,7 +88,7 @@ jobs:
     - name : Upload packages
       uses: actions/upload-artifact@master
       with:
-        name: WN552R1_3.4-KVR_${{ env.time }}
+        name: WN552R1_3.4_${{ env.time }}
         path: /opt/images
 
     - name: Release
@@ -111,5 +98,5 @@ jobs:
         body: | 
                 - WN552R1
                
-        tag_name: WN552R1_3.4-KVR
+        tag_name: WN552R1_3.4
         files: /opt/images/*.zip
