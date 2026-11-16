@@ -110,3 +110,6 @@ jobs:
                
         tag_name: WN552R1_3.4-KVR
         files: /opt/images/*.zip
+               
+        tag_name: WN552R1_3.4-KVR
+        files: /opt/images/*.zip
