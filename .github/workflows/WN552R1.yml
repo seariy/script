@@ -44,18 +44,29 @@ jobs:
         cd /opt/rt-n56u/toolchain-mipsel
         sh dl_toolchain.sh
         mkdir -p /opt/images/
+
+        ######### 修改配置文件 ###################################################################
+        
+        sed -i "s/CONFIG_FIRMWARE_ENABLE_IPV6=y/CONFIG_FIRMWARE_ENABLE_IPV6=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        sed -i "s/CONFIG_FIRMWARE_INCLUDE_SMBD36=y/CONFIG_FIRMWARE_INCLUDE_SMBD36=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        sed -i "s/CONFIG_FIRMWARE_INCLUDE_SFTP=y/CONFIG_FIRMWARE_INCLUDE_SFTP=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        sed -i "s/CONFIG_FIRMWARE_INCLUDE_FFMPEG_NEW=y/CONFIG_FIRMWARE_INCLUDE_FFMPEG_NEW=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        sed -i "s/CONFIG_FIRMWARE_INCLUDE_NAPT66=y/CONFIG_FIRMWARE_INCLUDE_NAPT66=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        sed -i "s/CONFIG_FIRMWARE_INCLUDE_VLMCSD=y/CONFIG_FIRMWARE_INCLUDE_VLMCSD=y/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        
+        ######### 修改默认参数 ###################################################################
         
         #echo "修改 LAN IP 地址"
         sed -i "s/192.168.2/192.168.10/g" /opt/rt-n56u/trunk/user/shared/defaults.h
 
         #echo "默认设置为 AP模式"
-        echo "#define BOARD_ROLE_REPEATER	1" >> /opt/rt-n56u/trunk/configs/boards/WN552R1/board.h
+        #echo "#define BOARD_ROLE_REPEATER	1" >> /opt/rt-n56u/trunk/configs/boards/WN552R1/board.h
         
         #echo "修改 2G 无线名称"
-        sed -i 's/BOARD_PID "_%s"/"ASUS"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/BOARD_PID "_%s"/"Wavlink"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
 
         #echo "修改 5G 无线名称"
-        sed -i 's/BOARD_PID "_5G_%s"/"ASUS_AC"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/BOARD_PID "_5G_%s"/"Wavlink_AC"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
         
         #echo "修改 2G 访客无线名称"
         sed -i 's/BOARD_PID "_GUEST_%s"/"GUEST"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
@@ -65,6 +76,8 @@ jobs:
 
         #echo "修改 无线密码"
         sed -i 's/1234567890/abcd1234/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        
+        #########################################################################################
         
     - name: Build Firmware
       env:
@@ -77,8 +90,6 @@ jobs:
         exit 1
         fi
         cp -f configs/templates/$TNAME.config .config
-
-        ######  清除默认配置  ###############################################################
         
         #########################################################################################
         sudo ./clear_tree
