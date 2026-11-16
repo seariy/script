@@ -52,7 +52,7 @@ jobs:
         sed -i "s/CONFIG_FIRMWARE_INCLUDE_SFTP=y/CONFIG_FIRMWARE_INCLUDE_SFTP=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
         sed -i "s/CONFIG_FIRMWARE_INCLUDE_FFMPEG_NEW=y/CONFIG_FIRMWARE_INCLUDE_FFMPEG_NEW=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
         sed -i "s/CONFIG_FIRMWARE_INCLUDE_NAPT66=y/CONFIG_FIRMWARE_INCLUDE_NAPT66=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
-        sed -i "s/CONFIG_FIRMWARE_INCLUDE_VLMCSD=y/CONFIG_FIRMWARE_INCLUDE_VLMCSD=y/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        sed -i "s/CONFIG_FIRMWARE_INCLUDE_VLMCSD=y/CONFIG_FIRMWARE_INCLUDE_VLMCSD=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
         
         ######### 修改默认参数 ###################################################################
         
@@ -68,13 +68,13 @@ jobs:
         sed -i 's/192.168.1.1/192.168.10.1/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/general.js
 
         #echo "默认设置为 AP模式"
-        #echo "#define BOARD_ROLE_REPEATER	1" >> /opt/rt-n56u/trunk/configs/boards/WN552R1/board.h
+        echo "#define BOARD_ROLE_REPEATER	1" >> /opt/rt-n56u/trunk/configs/boards/WN552R1/board.h
         
         #echo "修改 2G 无线名称"
-        sed -i 's/BOARD_PID "_%s"/"Wavlink"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/BOARD_PID "_%s"/"ASUS"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
 
         #echo "修改 5G 无线名称"
-        sed -i 's/BOARD_PID "_5G_%s"/"Wavlink_AC"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i 's/BOARD_PID "_5G_%s"/"ASUS_AC"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
         
         #echo "修改 2G 访客无线名称"
         sed -i 's/BOARD_PID "_GUEST_%s"/"GUEST"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
@@ -118,7 +118,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         body: | 
-                - WN552R1
+                - WN552R1  默认AP模式
                
-        tag_name: WN552R1_3.4
+        tag_name: WN552R1_3.4_AP专用
         files: /opt/images/*.zip
