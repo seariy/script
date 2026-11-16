@@ -1,0 +1,118 @@
+##################################################
+######      WN552R1-KVR    测试正常          ######
+##################################################
+name: Build WN552R1-KVR
+
+on: 
+  workflow_dispatch:
+
+#设置仓库的读写权限
+permissions:
+  contents: write
+env:
+  TZ: Asia/Shanghai
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install unzip libtool-bin curl cmake gperf gawk flex bison nano xxd fakeroot \
+        cpio git python3-docutils gettext automake autopoint texinfo build-essential help2man \
+        pkg-config zlib1g-dev libgmp3-dev libmpc-dev libmpfr-dev libncurses5-dev libltdl-dev wget
+        sudo timedatectl set-timezone Asia/Shanghai
+    - name: Install UPX
+      uses: crazy-max/ghaction-upx@v3
+      with:
+        version: v4.2.4
+        install-only: true
+
+    - name: Clone source code
+      env:
+        KERNEL: 3.4
+      run: |
+        git clone --depth=1 https://github.com/seariy/Padavan-hanwckf.git /opt/rt-n56u
+        rm -rf /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap
+        cp -r theme/bootstrap /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed
+        
+        cd /opt/rt-n56u/toolchain-mipsel
+        sh dl_toolchain.sh
+        mkdir -p /opt/images/
+
+        ######### 修改配置文件 ###################################################################
+        
+        sed -i "s/CONFIG_FIRMWARE_ENABLE_IPV6=y/CONFIG_FIRMWARE_ENABLE_IPV6=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        sed -i "s/CONFIG_FIRMWARE_INCLUDE_SMBD36=y/CONFIG_FIRMWARE_INCLUDE_SMBD36=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        sed -i "s/CONFIG_FIRMWARE_INCLUDE_SFTP=y/CONFIG_FIRMWARE_INCLUDE_SFTP=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        sed -i "s/CONFIG_FIRMWARE_INCLUDE_FFMPEG_NEW=y/CONFIG_FIRMWARE_INCLUDE_FFMPEG_NEW=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        sed -i "s/CONFIG_FIRMWARE_INCLUDE_NAPT66=y/CONFIG_FIRMWARE_INCLUDE_NAPT66=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        sed -i "s/CONFIG_FIRMWARE_INCLUDE_VLMCSD=y/CONFIG_FIRMWARE_INCLUDE_VLMCSD=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        
+        ######### 修改默认参数 ###################################################################
+        
+        #echo "修改 LAN IP 地址"
+        sed -i "s/192.168.2/192.168.10/g" /opt/rt-n56u/trunk/user/shared/defaults.h
+        
+        sed -i 's/192.168.2.1/192.168.10.1/g' /opt/rt-n56u/trunk/user/www/dict/CN.dict
+        sed -i 's/192.168.2.1/192.168.10.1/g' /opt/rt-n56u/trunk/user/www/dict/EN.footer
+        sed -i 's/192.168.2.1/192.168.10.1/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Restarting.asp
+        sed -i 's/192.168.1.1/192.168.10.1/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_APLAN_Content.asp
+        sed -i 's/192.168.1.1/192.168.10.1/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_LAN_Content.asp
+        sed -i 's/192.168.1.1/192.168.10.1/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_SettingBackup_Content.asp
+        sed -i 's/192.168.1.1/192.168.10.1/g' /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/general.js
+
+        #echo "默认设置为 AP模式"
+        #echo "#define BOARD_ROLE_REPEATER	1" >> /opt/rt-n56u/trunk/configs/boards/WN552R1/board.h
+        
+        #echo "修改 2G 无线名称"
+        sed -i 's/"PDCN"/"Wavlink"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+
+        #echo "修改 5G 无线名称"
+        sed -i 's/"PDCN_5G"/"Wavlink_AC"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+
+        #echo "修改 无线密码"
+        sed -i 's/1234567890/abcd1234/g' /opt/rt-n56u/trunk/user/shared/defaults.h
+        
+        #########################################################################################
+        
+    - name: Build Firmware
+      env:
+        TNAME: WN552R1
+        KERNEL: 3.4
+      run: |
+        cd /opt/rt-n56u/trunk
+        if [ ! -f configs/templates/$TNAME.config ] ; then
+        echo "configs/templates/$TNAME.config 没有找到 "
+        exit 1
+        fi
+        cp -f configs/templates/$TNAME.config .config
+        
+        #########################################################################################
+        sudo ./clear_tree
+        sudo ./build_firmware_modify $TNAME 0
+        sudo mv -f images/*.trx /opt/images/WN552R1_3.4.3.9-099-KVR.trx
+        cp -f .config /opt/images/${TNAME}.config
+        echo "time=$(date '+%Y-%m-%d_%H%M')" >> $GITHUB_ENV
+        echo "date=$(date '+%Y-%m-%d')" >> $GITHUB_ENV
+    
+    - name : Upload packages
+      uses: actions/upload-artifact@master
+      with:
+        name: WN552R1_3.4-KVR_${{ env.time }}
+        path: /opt/images
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        body: | 
+                - WN552R1-KVR  默认AP模式
+               
+        tag_name: WN552R1_3.4_KVR
+        files: /opt/images/*.zip
