@@ -37,7 +37,7 @@ jobs:
       env:
         KERNEL: 3.4
       run: |
-        git clone --depth=1 https://github.com/seariy/Padavan_3.4-KVR_lmq8267.git /opt/rt-n56u
+        git clone --depth=1 https://github.com/seariy/Padavan-keke1023.git /opt/rt-n56u
         rm -rf /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap
         cp -r theme/bootstrap /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed
         
@@ -47,17 +47,17 @@ jobs:
 
         ######### 修改配置文件 ###################################################################
         
-        sed -i "s/CONFIG_FIRMWARE_ENABLE_IPV6=y/CONFIG_FIRMWARE_ENABLE_IPV6=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
-        sed -i "s/CONFIG_FIRMWARE_INCLUDE_SMBD36=y/CONFIG_FIRMWARE_INCLUDE_SMBD36=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
-        sed -i "s/CONFIG_FIRMWARE_INCLUDE_SFTP=y/CONFIG_FIRMWARE_INCLUDE_SFTP=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
-        sed -i "s/CONFIG_FIRMWARE_INCLUDE_FFMPEG_NEW=y/CONFIG_FIRMWARE_INCLUDE_FFMPEG_NEW=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
-        sed -i "s/CONFIG_FIRMWARE_INCLUDE_NAPT66=y/CONFIG_FIRMWARE_INCLUDE_NAPT66=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
-        sed -i "s/CONFIG_FIRMWARE_INCLUDE_VLMCSD=y/CONFIG_FIRMWARE_INCLUDE_VLMCSD=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        #sed -i "s/CONFIG_FIRMWARE_ENABLE_IPV6=y/CONFIG_FIRMWARE_ENABLE_IPV6=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        #sed -i "s/CONFIG_FIRMWARE_INCLUDE_SMBD36=y/CONFIG_FIRMWARE_INCLUDE_SMBD36=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        #sed -i "s/CONFIG_FIRMWARE_INCLUDE_SFTP=y/CONFIG_FIRMWARE_INCLUDE_SFTP=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        #sed -i "s/CONFIG_FIRMWARE_INCLUDE_FFMPEG_NEW=y/CONFIG_FIRMWARE_INCLUDE_FFMPEG_NEW=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        #sed -i "s/CONFIG_FIRMWARE_INCLUDE_NAPT66=y/CONFIG_FIRMWARE_INCLUDE_NAPT66=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
+        #sed -i "s/CONFIG_FIRMWARE_INCLUDE_VLMCSD=y/CONFIG_FIRMWARE_INCLUDE_VLMCSD=n/g" /opt/rt-n56u//trunk/configs/templates/WN552R1.config
         
         ######### 修改默认参数 ###################################################################
         
         #echo "修改 LAN IP 地址"
-        sed -i "s/192.168.2/192.168.10/g" /opt/rt-n56u/trunk/user/shared/defaults.h
+        sed -i "s/192.168.123/192.168.10/g" /opt/rt-n56u/trunk/user/shared/defaults.h
         
         sed -i 's/192.168.2.1/192.168.10.1/g' /opt/rt-n56u/trunk/user/www/dict/CN.dict
         sed -i 's/192.168.2.1/192.168.10.1/g' /opt/rt-n56u/trunk/user/www/dict/EN.footer
