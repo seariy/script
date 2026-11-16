@@ -61,6 +61,9 @@ jobs:
         #sed -i "s/LAN3=1/LAN3=3/g" /opt/rt-n56u/trunk/configs/boards/JCG-836PRO/kernel-3.4.x.config
         #sed -i "s/LAN4=0/LAN4=4/g" /opt/rt-n56u/trunk/configs/boards/JCG-836PRO/kernel-3.4.x.config
 
+        #echo "默认设置为 AP模式"
+        #echo "#define BOARD_ROLE_REPEATER	1" >> ./configs/boards/RM2100/board.h
+        
         #echo "修改 2G 无线名称"
         sed -i 's/BOARD_PID "_%s"/"PDCN"/g' /opt/rt-n56u/trunk/user/shared/defaults.h
 
