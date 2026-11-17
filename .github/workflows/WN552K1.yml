@@ -75,7 +75,7 @@ jobs:
 
     - name: Build Firmware
       env:
-        TNAME: JDC-1
+        TNAME: WN552K1
         KERNEL: 3.4
       run: |
         cd /opt/rt-n56u/trunk
@@ -90,7 +90,7 @@ jobs:
         #########################################################################################
         sudo ./clear_tree
         sudo ./build_firmware_modify $TNAME 0
-        sudo mv -f images/*.trx /opt/images/JDC-1_3.4.3.9-099.trx
+        sudo mv -f images/*.trx /opt/images/WN552K1_3.4.3.9-099.trx
         cp -f .config /opt/images/${TNAME}.config
         echo "time=$(date '+%Y-%m-%d_%H%M')" >> $GITHUB_ENV
         echo "date=$(date '+%Y-%m-%d')" >> $GITHUB_ENV
@@ -98,7 +98,7 @@ jobs:
     - name : Upload packages
       uses: actions/upload-artifact@master
       with:
-        name: JDC-1_3.4-KVR_${{ env.time }}
+        name: WN552K1_3.4-KVR_${{ env.time }}
         path: /opt/images
 
     - name: Release
@@ -106,7 +106,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         body: | 
-                - JDC-1
+                - WN552K1
                
-        tag_name: JDC-1_3.4-KVR
+        tag_name: WN552K1_3.4-KVR
         files: /opt/images/*.zip
